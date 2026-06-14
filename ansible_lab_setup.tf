@@ -141,9 +141,9 @@ resource "aws_instance" "Ansible" {
   }
   provisioner "remote-exec" {
     inline = [
-      "echo '${aws_instance.Node1.private_ip} node1' >> /etc/hosts",
-      "echo '${aws_instance.Node2.private_ip} node2' >> /etc/hosts",
-      "echo '${aws_instance.Node3.private_ip} node3' >> /etc/hosts"
+      "echo '${aws_instance.manager.private_ip} manager' >> /etc/hosts",
+      "echo '${aws_instance.worker1.private_ip} worker1' >> /etc/hosts",
+      "echo '${aws_instance.worker2.private_ip} worker2' >> /etc/hosts"
     ]
   }
   tags = {
