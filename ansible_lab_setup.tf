@@ -52,9 +52,9 @@ resource "aws_security_group" "allow-web" {
   vpc_id      = aws_vpc.dev-vpc.id
 
   ingress {
-    description = "HTTPS"
-    from_port   = 443
-    to_port     = 443
+    description = "custom_swarm_port"
+    from_port   = 2377
+    to_port     = 2377
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -83,7 +83,7 @@ resource "aws_security_group" "allow-web" {
   }
 }
 ## Create Node1 ======================================================================
-resource "aws_instance" "Node1" {
+resource "aws_instance" "manager" {
   ami               = "${var.amazon_linux_id}"
   instance_type     = "${var.instance_type}"
   vpc_security_group_ids = [aws_security_group.allow-web.id]
@@ -92,12 +92,12 @@ resource "aws_instance" "Node1" {
   key_name          = "${var.pkey}"
   user_data = file("${path.module}/node.sh")
   tags = {
-    Name = "Node 1"
+    Name = "manager"
   }
 }
 
 ## Create Node2 ======================================================================
-resource "aws_instance" "Node2" {
+resource "aws_instance" "worker1" {
   ami               = "${var.amazon_linux_id}"
   instance_type     = "${var.instance_type}"
   vpc_security_group_ids = [aws_security_group.allow-web.id]
@@ -106,12 +106,12 @@ resource "aws_instance" "Node2" {
   key_name          = "${var.pkey}"
   user_data = file("${path.module}/node.sh")
   tags = {
-    Name = "Node 2"
+    Name = "worker1"
   }
 }
 
 ## Create Node3 ======================================================================
-resource "aws_instance" "Node3" {
+resource "aws_instance" "worker2" {
   ami               = "${var.amazon_linux_id}"
   instance_type     = "${var.instance_type}"
   vpc_security_group_ids = [aws_security_group.allow-web.id]
@@ -120,7 +120,7 @@ resource "aws_instance" "Node3" {
   key_name          = "${var.pkey}"
   user_data = file("${path.module}/node.sh")
   tags = {
-    Name = "Node 3"
+    Name = "worker2"
   }
 }
 
